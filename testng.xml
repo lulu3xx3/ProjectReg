@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <listeners>
+        <listener class-name="AutomationAssignment.AllureFailureListenerTest" />
+    </listeners>
+    <test verbose="2" preserve-order="true" name="C:/Users/jmvar/IdeaProjects/untitled1/target">
+        <classes>
+            <class name="AutomationAssignment.WebAutomationAssignmentTest" />
+            <class name="AutomationAssignment.UIAutomationTest"/>
+            <class name="AutomationAssignment.APITesting"/>
+            <class name="AutomationAssignment.ResponsivenessTest"/>
+
+        </classes>
+    </test>
+</suite>
