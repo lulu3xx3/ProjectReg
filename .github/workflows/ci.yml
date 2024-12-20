@@ -27,13 +27,30 @@ jobs:
       - name: Get list of modified files
         id: files
         run: |
-          echo "Modified files:"
+          echo "Getting modified files..."
           git diff --name-only ${{ github.event.before }} ${{ github.sha }} > modified_files.txt
           cat modified_files.txt
           echo "::set-output name=files::$(cat modified_files.txt)"
 
-      # Step 4: Run tests for modified files
+      # Step 4: Debugging - Check modified files
+      - name: Debugging - Check modified files
+        run: |
+          echo "Modified files: ${{ steps.files.outputs.files }}"
+
+      # Step 5: Run tests for modified files
       - name: Run tests for modified files
         run: |
           modified_files="${{ steps.files.outputs.files }}"
-          echo "Modified fi
+          echo "Modified files to test: $modified_files"
+          
+          # Run tests for the modified files
+          for file in $modified_files; do
+            echo "Checking file: $file"
+            if [[ "$file" == *"Test"* && "$file" == *.java ]]; then
+              echo "Running tests for $file"
+              # Run the test for the modified file
+              mvn clean test -Dtest=${file}
+            else
+              echo "Not a test file: $file"
+            fi
+          done
