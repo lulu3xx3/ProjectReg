@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '23' 
-          distribution: 'adoptopenjdk'  # Specify the distribution (e.g., adoptopenjdk, openjdk)
+          distribution: 'adoptopenjdk' 
 
       - name: Get list of modified files
         id: files
