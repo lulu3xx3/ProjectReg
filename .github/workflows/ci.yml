@@ -3,54 +3,41 @@ name: CI Pipeline
 on:
   push:
     branches:
-      - main
+      - main  
   pull_request:
     branches:
-      - main
+      - main  
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  
 
     steps:
-      # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Set up Java
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          java-version: '23'
+          java-version: '17'  # Specify the Java version you want to use
+          distribution: 'adoptopenjdk'  # Specify the distribution (e.g., adoptopenjdk, openjdk)
 
-      # Step 3: Get list of modified files
       - name: Get list of modified files
         id: files
         run: |
-          echo "Getting modified files..."
+          echo "Modified files:"
           git diff --name-only ${{ github.event.before }} ${{ github.sha }} > modified_files.txt
           cat modified_files.txt
           echo "::set-output name=files::$(cat modified_files.txt)"
 
-      # Step 4: Debugging - Check modified files
-      - name: Debugging - Check modified files
-        run: |
-          echo "Modified files: ${{ steps.files.outputs.files }}"
-
-      # Step 5: Run tests for modified files
       - name: Run tests for modified files
         run: |
           modified_files="${{ steps.files.outputs.files }}"
-          echo "Modified files to test: $modified_files"
-          
-          # Run tests for the modified files
+          echo "Modified files: $modified_files"
           for file in $modified_files; do
-            echo "Checking file: $file"
-            if [[ "$file" == *"Test"* && "$file" == *.java ]]; then
+            # Check if the file is a test file and run tests for it
+            if [[ "$file" == *"Test"* ]]; then
               echo "Running tests for $file"
-              # Run the test for the modified file
-              mvn clean test -Dtest=${file}
-            else
-              echo "Not a test file: $file"
+              mvn -f $file clean test  # Adjust if needed for your test setup
             fi
           done
