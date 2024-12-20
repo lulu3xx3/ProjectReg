@@ -1,0 +1,46 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main  
+  pull_request:
+    branches:
+      - main  
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  
+
+    steps:
+      
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '23'  
+
+      
+      - name: Get list of modified files
+        id: files
+        run: |
+          echo "Modified files:"
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > modified_files.txt
+          cat modified_files.txt
+          echo "::set-output name=files::$(cat modified_files.txt)"
+
+     
+      - name: Run tests for modified files
+        run: |
+          modified_files="${{ steps.files.outputs.files }}"
+          echo "Modified files: $modified_files"
+          for file in $modified_files; do
+            # Check if the file is a test file and run tests for it
+            if [[ "$file" == *"Test"* ]]; then
+              echo "Running tests for $file"
+              mvn -f $file clean test  # Adjust if needed for your test setup
+            fi
+          done
