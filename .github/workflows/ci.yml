@@ -19,7 +19,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          java-version: '17'  # Specify the Java version you want to use
+          java-version: '23' 
           distribution: 'adoptopenjdk'  # Specify the distribution (e.g., adoptopenjdk, openjdk)
 
       - name: Get list of modified files
