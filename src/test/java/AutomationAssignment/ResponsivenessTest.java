@@ -42,7 +42,7 @@ public class ResponsivenessTest {
         driver.get("https://chatgpt.com/");
         driver.manage().window().setSize(new Dimension(375, 667));
         boolean isPromptEnabled = driver.findElement(By.xpath("//div[@id='prompt-textarea']")).isEnabled();
-        Assert.assertTrue(isPromptEnabled, "Prompt Is NOT ENBLED");
+        Assert.assertTrue(isPromptEnabled, "Prompt Is NOT ENABLED");
     }
 
 
